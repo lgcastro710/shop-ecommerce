@@ -1,8 +1,19 @@
+import { useState } from 'react'
 import { useShop } from '../context/ShopContext'
 import { fmt } from '../utils/helpers'
+import OrderSuccessModal from './OrderSuccessModal'
 
 export default function CartDrawer({ open, onClose }) {
   const { cart, cartTotal, updateQty, removeFromCart, clearCart } = useShop()
+  const [orderOpen, setOrderOpen] = useState(false)
+  const [orderSnapshot, setOrderSnapshot] = useState({ items: [], total: 0 })
+
+  function handleCheckout() {
+    setOrderSnapshot({ items: [...cart], total: cartTotal })
+    clearCart()
+    onClose()
+    setOrderOpen(true)
+  }
 
   return (
     <>
@@ -72,7 +83,10 @@ export default function CartDrawer({ open, onClose }) {
               <span className="text-gray-500 text-sm">Subtotal</span>
               <span className="font-bold text-lg">{fmt(cartTotal)}</span>
             </div>
-            <button className="w-full bg-gradient-to-r from-brand-600 to-purple-600 text-white py-3 rounded-full font-semibold hover:opacity-90 transition">
+            <button
+              onClick={handleCheckout}
+              className="w-full bg-gradient-to-r from-brand-600 to-purple-600 text-white py-3 rounded-full font-semibold hover:opacity-90 transition active:scale-95"
+            >
               Finalizar compra →
             </button>
             <button
@@ -84,6 +98,13 @@ export default function CartDrawer({ open, onClose }) {
           </div>
         )}
       </div>
+
+      <OrderSuccessModal
+        open={orderOpen}
+        onClose={() => setOrderOpen(false)}
+        items={orderSnapshot.items}
+        total={orderSnapshot.total}
+      />
     </>
   )
 }
