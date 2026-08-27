@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-   "homepage": "https://lgcastro710.github.io/shop-ecommerce/",
+  "homepage": "https://lgcastro710.github.io/shop-ecommerce/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
